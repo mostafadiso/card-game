@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Mafia Game</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:#000;
+    color:white;
+    text-align:center;
+}
+
+.setup{
+    padding:20px;
+}
+
+input{
+    width:60px;
+    padding:5px;
+    margin:5px;
+}
+
+button{
+    padding:10px 20px;
+    margin-top:15px;
+    font-size:16px;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.hidden{
+    display:none;
+}
+
+#card{
+    width:100vw;
+    height:100vh;
+    object-fit:contain;
+    cursor:pointer;
+}
+</style>
+</head>
+<body>
+
+<div class="setup" id="setup">
+
+<h2>Game Setup</h2>
+
+<div>Killers (max 3): <input type="number" id="killer" min="0" max="3" value="1"></div>
+<div>Good Citizen: <input type="number" id="good" min="0" value="1"></div>
+<div>Bad Citizen: <input type="number" id="bad" min="0" value="0"></div>
+<div>Detective (0-1): <input type="number" id="detective" min="0" max="1" value="0"></div>
+<div>Doctor (0-1): <input type="number" id="doctor" min="0" max="1" value="0"></div>
+<div>Crazy (0-1): <input type="number" id="crazy" min="0" max="1" value="0"></div>
+<div>Annoying (0-1): <input type="number" id="annoying" min="0" max="1" value="0"></div>
+
+<button onclick="startGame()">Start Game</button>
+
+<h3 id="totalPlayers"></h3>
+
+</div>
+
+<img id="card" class="hidden" src="back.png">
+
+<script>
+
+const card = document.getElementById("card");
+const setup = document.getElementById("setup");
+const totalPlayersText = document.getElementById("totalPlayers");
+
+let roles = [];
+let currentPlayer = 0;
+let showing = false;
+
+function updateTotal(){
+    const total =
+        +killer.value +
+        +good.value +
+        +bad.value +
+        +detective.value +
+        +doctor.value +
+        +crazy.value +
+        +annoying.value;
+
+    totalPlayersText.textContent = "Total Players: " + total;
+}
+
+document.querySelectorAll("input").forEach(input=>{
+    input.addEventListener("input",updateTotal);
+});
+
+updateTotal();
+
+function shuffle(array){
+    return array.sort(()=>0.5 - Math.random());
+}
+
+function startGame(){
+
+    roles = [];
+
+    for(let i=0;i<killer.value;i++) roles.push("killer.png");
+    for(let i=0;i<good.value;i++) roles.push("good.png");
+    for(let i=0;i<bad.value;i++) roles.push("bad.png");
+    for(let i=0;i<detective.value;i++) roles.push("detective.png");
+    for(let i=0;i<doctor.value;i++) roles.push("doctor.png");
+    for(let i=0;i<crazy.value;i++) roles.push("crazy.png");
+    for(let i=0;i<annoying.value;i++) roles.push("annoying.png");
+
+    if(roles.length === 0){
+        alert("Choose at least 1 player");
+        return;
+    }
+
+    roles = shuffle(roles);
+
+    setup.classList.add("hidden");
+    card.classList.remove("hidden");
+
+    currentPlayer = 0;
+    showing = false;
+    card.src = "back.png";
+}
+
+card.onclick = function(){
+
+    if(currentPlayer >= roles.length){
+        alert("Game Finished 🎉");
+        location.reload();
+        return;
+    }
+
+    if(!showing){
+        card.src = roles[currentPlayer];
+        showing = true;
+    }else{
+        showing = false;
+        currentPlayer++;
+        card.src = "back.png";
+    }
+}
+
+</script>
+
+</body>
+</html>
