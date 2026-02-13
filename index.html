@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Card Game</title>
+<style>
+body {
+    background: #222;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    width: 120px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<img class="card" id="card" src="back.png">
+
+<script>
+let flipped = false;
+
+document.getElementById("card").onclick = function() {
+    if (!flipped) {
+        this.src = "card1.png";
+        flipped = true;
+    } else {
+        this.src = "back.png";
+        flipped = false;
+    }
+}
+</script>
+
+</body>
+</html>
